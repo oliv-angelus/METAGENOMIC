@@ -8,7 +8,7 @@ A repository containing a collection of scripts to automate and streamline shotg
 
 ## 📖 About This Project
 
-This project provides a suite of scripts designed to handle various stages of a metagenomic analysis pipeline, from initial quality control of raw sequencing reads to the annotation and classification of Metagenome-Assembled Genomes (MAGs). The goal is to create a modular, reproducible, and easy-to-use toolkit for researchers.
+This project provides a suite of scripts designed to handle various stages of a metagenomic analysis pipeline, with tailored workflows for both Illumina (short-read) and Oxford Nanopore (long-read) sequencing data. The tools are built to manage the unique characteristics of each data type and can be adapted for hybrid assembly approaches. The pipeline covers all critical steps, from the initial quality control of raw reads to the final annotation and classification of high-quality Metagenome-Assembled Genomes (MAGs). The goal is to create a modular, reproducible, and easy-to-use toolkit for researchers.
 
 ## 🛠️ Core Technologies
 
