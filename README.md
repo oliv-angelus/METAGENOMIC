@@ -27,16 +27,17 @@ The scripts and workflows in this repository are built using the following techn
 This repository leverages a range of standard and state-of-the-art bioinformatic tools, which are orchestrated by the scripts. The core tools utilized include:
 
 #### **Quality Control**
-* **FastQC**: Raw read quality assessment.
+* **FastQC**: Raw read quality assessment for illumina reads.
+* **NanoPlot**: Raw read quality assessment for nanopore reads.
 * **MultiQC**: Aggregates reports from multiple tools into a single HTML file.
 
 #### **Assembly & Assessment**
-* **MEGAHIT**: A fast and memory-efficient metagenome assembler.
-* **Flye**: An assembler for long and noisy reads (useful for hybrid assembly).
+* **MEGAHIT**: A fast and memory-efficient metagenome assembler for illumina reads.
+* **Flye**: An assembler for long and noisy reads (useful for hybrid assembly), here we use for nanopore reads using -meta parameter.
 * **Quast**: Evaluates the quality of genome assemblies.
 
 #### **Metagenomic Binning**
-* **MetaBAT2**: A tool for binning assembled contigs into MAGs based on sequence composition and coverage.
+* **MetaBAT2**: A tool for binning assembled contigs into MAGs based on sequence composition and coverage (i preffer this one).
 * **MaxBin2**: Another popular tool for binning contigs.
 * **CONCOCT**: Bins contigs using sequence composition and coverage across multiple samples.
 * **SemiBin**: A semi-supervised tool that leverages deep learning for binning.
