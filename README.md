@@ -29,6 +29,8 @@ This repository leverages a range of standard and state-of-the-art bioinformatic
 #### **Quality Control**
 * **FastQC**: Raw read quality assessment for illumina reads.
 * **NanoPlot**: Raw read quality assessment for nanopore reads.
+* **Fastp**: For trimming illumina reads.
+* **Filtlong**: For trimming nanopore reads.
 * **MultiQC**: Aggregates reports from multiple tools into a single HTML file.
 
 #### **Assembly & Assessment**
