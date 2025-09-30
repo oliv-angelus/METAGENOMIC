@@ -1,0 +1,49 @@
+# How to executate the creation of this environment using mamba:
+# mamba env create -f metagenomics.yml
+
+name: metagenomics
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  # Quality Control
+  - fastqc
+  - nanoplot
+  - fastp
+  - filtlong
+  - multiqc
+
+  # Assembly & Assessment
+  - megahit
+  - flye
+  - quast
+
+  # Metagenomic Binning
+  - metabat2
+  - maxbin2
+  - concoct
+  - semibin
+
+  # Bin Refinement & Selection
+  - das_tool
+
+  # MAG Quality Assessment
+  - checkm2
+
+  # Gene Prediction & Functional Annotation
+  - prodigal
+  - eggnog-mapper
+
+  # Taxonomic Classification
+  - kraken2
+  - bracken
+
+  # Read Mapping & Coverage
+  - minimap2
+  - samtools
+  - coverm
+
+  # Phylogenetic Analysis
+  - mafft
+  - fasttree
