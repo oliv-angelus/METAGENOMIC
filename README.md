@@ -69,7 +69,36 @@ This repository leverages a range of standard and state-of-the-art bioinformatic
 
 ## 🚀 Getting Started
 
-Detailed instructions on installation, environment setup, and script usage will be added soon.
+This guide will walk you through setting up the computational environment and downloading the necessary databases to run the analyses in this repository.
+
+1. Prerequisites
+Before you begin, you must have Mamba (or Conda) installed on your system.
+
+2. Clone the Repository
+First, clone this repository to your local machine and navigate into the created directory.
+
+```bash
+git clone https://github.com/oliv-angelus/metagenomic
+cd metagenomic
+```
+3. Create the Mamba Environment
+The metagenomics.yaml file contains a list of all the required tools. Use the command below to create an isolated environment with everything installed:
+
+```bash
+mamba env create -f metagenomics.yaml
+```
+This may take a few minutes as Mamba will download and install dozens of bioinformatics packages. Once completed, activate the environment to start using it:
+
+```bash
+mamba activate metagenomics
+```
+4. Prepare the Databases
+The databases.sh script automates the download and preparation of the CheckM2 and EggNOG databases.
+
+Attention! Before running the script, make sure the metagenomics environment (created in the previous step) is active. The script requires the checkm2 command to function correctly.
+
+
+
 
 ## 📄 License
 
