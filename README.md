@@ -109,7 +109,6 @@ You can run the script in one of two ways:
 
 * Option 1 (Default): Download the databases to the default directory (~/databases):
 
-Bash
 ```bash
 ./databases.sh
 ```
