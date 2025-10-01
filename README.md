@@ -97,8 +97,39 @@ The databases.sh script automates the download and preparation of the CheckM2 an
 
 Attention! Before running the script, make sure the metagenomics environment (created in the previous step) is active. The script requires the checkm2 command to function correctly.
 
+a. Make the script executable (only needs to be done once):
 
+```bash
+chmod +x databases.sh
+```
 
+b. Run the script:
+
+You can run the script in one of two ways:
+
+* Option 1 (Default): Download the databases to the default directory (~/databases):
+
+Bash
+```bash
+./databases.sh
+```
+
+* Option 2 (Custom): Specify a different directory (e.g., an external HDD):
+
+```Bash
+./databases.sh /path/to/your/directory
+```
+
+This process can be very time-consuming and may use tens of gigabytes of disk space and bandwidth, depending on your connection.
+
+5. Download the Kraken2 Database (Manual Step)
+As noted by the script, the Kraken2 database must be downloaded manually. This allows you to choose the version that is most appropriate for your analysis (e.g., Standard, PlusPF, etc.).
+
+      1. Access the official Kraken2 database index: https://benlangmead.github.io/aws-indexes/k2.
+
+      2. Choose and download the database of your preference.
+
+      3. Unpack it and place the contents inside the kraken2_database directory that was created by the databases.sh script (${DB_PATH}/kraken2_database).
 
 ## 📄 License
 
