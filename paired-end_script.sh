@@ -19,6 +19,8 @@ if [ -z "$INPUT_DIR" ] || [ -z "$OUTPUT_DIR" ] || [ -z "$THREADS" ]; then
   exit 1
 fi
 
+set +e
+
 # == # DATABASE VARIABLES (adjust paths as necessary)
 KRAKEN_DB=~/databases/kraken_database # JUST A EXAMPLE, PLEASE DOWNLOAD YOUR OWN KRAKEN2 DATABASE
 EGGNOG_DB=~/databases/eggnog_database # PATH TO EGGNOG DATABASE
@@ -127,15 +129,19 @@ for SAMPLE_DIR in "$INPUT_DIR"/*; do
   echo -e "\033[35m METABAT2 \033[0m"
 
   METABAT2_OUT_DIR="$OUTPUT_DIR/04_BINNING/METABAT2/$SAMPLE"
-  metabat2 -i "$CONTIGS_FA" -a "$DEPTH_FILE" -o "$METABAT2_OUT_DIR/bin" -t "$THREADS"
+  metabat2 -i "$CONTIGS_FA" -a "$DEPTH_FILE" -o "$METABAT2_OUT_DIR/${SAMPLE}_bin" -t "$THREADS"
 
   # --- [05] QUALITY CONTROL ---
   echo -e "\033[35m CHECKM2 \033[0m"
-  checkm2 predict --threads "$THREADS" --input "$METABAT2_OUT_DIR" --output-directory "$OUTPUT_DIR/05_MAG_QC/CHECKM2/$SAMPLE" -x fa --force --database_path "$CHECKM2_DB"
+    if compgen -G "$METABAT2_OUT_DIR/*.fa" > /dev/null; then
+      checkm2 predict --threads "$THREADS" --input "$METABAT2_OUT_DIR" --output-directory "$OUTPUT_DIR/05_MAG_QC/CHECKM2/$SAMPLE" -x fa --force --database_path "$CHECKM2_DB"
+    else
+      echo -e "\033[33m⚠️ Nenhum bin encontrado para $SAMPLE, pulando CHECKM2.\033[0m"
+    fi
 
   # --- [06] INDIVIDUAL ANNOTATION OF MAGs ---
   echo -e "\033[35m PRODIGAL & EGGNOG - BINS \033[0m"
-  for MAG_FA in "$METABAT2_OUT_DIR"/bin.*.fa; do
+  for MAG_FA in "$METABAT2_OUT_DIR"/*.fa; do
     # TEST IF FILE EXISTS
     [ -e "$MAG_FA" ] || continue
     MAG_NAME=$(basename "$MAG_FA" .fa)
