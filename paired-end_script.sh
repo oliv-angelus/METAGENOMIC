@@ -22,9 +22,9 @@ fi
 set +e
 
 # == # DATABASE VARIABLES (adjust paths as necessary)
-KRAKEN_DB=~/databases/kraken_database # JUST A EXAMPLE, PLEASE DOWNLOAD YOUR OWN KRAKEN2 DATABASE
-EGGNOG_DB=~/databases/eggnog_database # PATH TO EGGNOG DATABASE
-CHECKM2_DB=~/databases/CheckM2_database # PATH TO CHECKM2 DATABASE
+KRAKEN_DB=~/dataAngelo/databases/k2_db/PlusPFP # JUST A EXAMPLE, PLEASE DOWNLOAD YOUR OWN KRAKEN2 DATABASE
+EGGNOG_DB=~/dataAngelo/databases/eggnog # PATH TO EGGNOG DATABASE
+CHECKM2_DB=~/dataAngelo/databases/CheckM2_database/uniref100.KO.1.dmnd # PATH TO CHECKM2 DATABASE
 
 # == # CREATION OF OUTPUT DIRECTORIES
 echo -e "\033[36m-> Creating directory structure in $OUTPUT_DIR\033[0m"
