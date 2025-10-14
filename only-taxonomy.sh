@@ -2,64 +2,67 @@
 
 set -e
 
-echo -e "\033[34m SCRIPT FOR TAXONOMIC PROFILING (KRAKEN2 + BRACKEN) \033[0m"
+echo -e "\033[34m SCRIPT FOR PAIRED-END METAGENOMICS \033[0m"
 
 # ===================== #
-#       INPUTS          #
+# PIPELINE FOR SHOTGUN  #
 # ===================== #
 
+# == # INPUTS
 INPUT_DIR="$1"
 OUTPUT_DIR="$2"
 THREADS="$3"
 
+# == # INPUT VERIFICATION
 if [ -z "$INPUT_DIR" ] || [ -z "$OUTPUT_DIR" ] || [ -z "$THREADS" ]; then
-  echo -e "\033[31m❌ Usage: $0 <input_directory_with_trimmed_reads> <output_directory> <threads>\033[0m"
+  echo -e "\033[31m❌ Usage: $0 <input_directory> <output_directory> <threads>\033[0m"
   exit 1
 fi
 
-# ===================== #
-#     DATABASE PATHS    #
-# ===================== #
+set +e
 
-KRAKEN_DB=~/dataAngelo/databases/k2_db/PlusPFP # 
+# == # DATABASE VARIABLES (adjust paths as necessary)
+KRAKEN_DB=~/dataAngelo/databases/k2_db/PlusPFP # JUST A EXAMPLE, PLEASE DOWNLOAD YOUR OWN KRAKEN2 DATABASE
 
-# ===================== #
-#    OUTPUT STRUCTURE   #
-# ===================== #
+# == # CREATION OF OUTPUT DIRECTORIES
+echo -e "\033[36m-> Creating directory structure in $OUTPUT_DIR\033[0m"
+mkdir -p "$OUTPUT_DIR"/{00_QC,01_PROFILING}
+mkdir -p "$OUTPUT_DIR/00_QC"/FASTP
+mkdir -p "$OUTPUT_DIR/01_PROFILING"/TAXONOMY
 
-echo -e "\033[36m-> Creating taxonomy output structure in $OUTPUT_DIR\033[0m"
-mkdir -p "$OUTPUT_DIR/TAXONOMY"
-TAX_DIR="$OUTPUT_DIR/TAXONOMY"
 
-# ===================== #
-#   PROCESS EACH SAMPLE #
-# ===================== #
+# == # PROCESSING EACH SAMPLE
+for SAMPLE_DIR in "$INPUT_DIR"/*; do
+  SAMPLE=$(basename "$SAMPLE_DIR")
+  echo -e "\033[33m🚀 Iniciando processamento da amostra: $SAMPLE\033[0m"
 
-for R1 in "$INPUT_DIR/"*_R1_trimmed.fastq.gz; do
-  SAMPLE=$(basename "$R1" "_R1_trimmed.fastq.gz")
-  R2="${INPUT_DIR}/${SAMPLE}_R2_trimmed.fastq.gz"
+  fastp \
+    -i "$SAMPLE_DIR"/*_R1*.fastq.gz \
+    -I "$SAMPLE_DIR"/*_R2*.fastq.gz \
+    -f 1 -F 1 \
+    -l 100 \
+    -o "$OUTPUT_DIR/00_QC/FASTP/${SAMPLE}_R1_trimmed.fastq.gz" \
+    -O "$OUTPUT_DIR/00_QC/FASTP/${SAMPLE}_R2_trimmed.fastq.gz" \
+    -h "$OUTPUT_DIR/00_QC/FASTP/${SAMPLE}_fastp.html" \
+    -j "$OUTPUT_DIR/00_QC/FASTP/${SAMPLE}_fastp.json" \
+    -w "$THREADS"
 
-  if [ ! -f "$R2" ]; then
-    echo -e "\033[33m⚠️ Paired file not found for $R1, skipping...\033[0m"
-    continue
-  fi
+  # == # TAXONOMIC AND FUNCTIONAL PROFILING (CONTIGS) ---
+  echo -e "\033[35m KRAKEN2 & BRACKEN \033[0m"
 
-  echo -e "\033[33m🚀 Processing sample: $SAMPLE\033[0m"
+  READ1="$OUTPUT_DIR/00_QC/FASTP/${SAMPLE}_R1_trimmed.fastq.gz"
+  READ2="$OUTPUT_DIR/00_QC/FASTP/${SAMPLE}_R2_trimmed.fastq.gz"
+  TAX_DIR="$OUTPUT_DIR/01_PROFILING/TAXONOMY"
 
-  # --- [KRAKEN2] ---
-  echo -e "\033[35m KRAKEN2 \033[0m"
   kraken2 \
     --db "$KRAKEN_DB" \
     --threads "$THREADS" \
-    --paired "$R1" "$R2" \
-    --use-names \
+    --paired "$READ1" "$READ2" \
     --report "$TAX_DIR/${SAMPLE}_kraken_report.txt" \
     --output "$TAX_DIR/${SAMPLE}_kraken_output.txt"
 
-  # --- [BRACKEN] ---
-  echo -e "\033[35m BRACKEN \033[0m"
   for level in D P C O F G S; do
-    echo "  → Bracken level: $level"
+    echo "  → Running for level $level ..."
     bracken \
       -d "$KRAKEN_DB" \
       -i "$TAX_DIR/${SAMPLE}_kraken_report.txt" \
@@ -68,8 +71,6 @@ for R1 in "$INPUT_DIR/"*_R1_trimmed.fastq.gz; do
       -l "$level" \
       -t 1
   done
-
-  echo -e "\033[32m✅ Finished sample: $SAMPLE\033[0m"
+     
+  echo -e "\033[32m✅ Finished processing sample: $SAMPLE\033[0m"
 done
-
-echo -e "\033[32m✅ Taxonomic profiling completed! Results in: $TAX_DIR \033[0m"
