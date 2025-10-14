@@ -107,8 +107,27 @@ for SAMPLE_DIR in "$INPUT_DIR"/*; do
   # --- [03] TAXONOMIC AND FUNCTIONAL PROFILING (CONTIGS) ---
   echo -e "\033[35m KRAKEN2 & BRACKEN \033[0m"
 
-  kraken2 --db "$KRAKEN_DB" --threads "$THREADS" --report "$OUTPUT_DIR/03_PROFILING/TAXONOMY/${SAMPLE}_kraken_report.txt" --output "$OUTPUT_DIR/03_PROFILING/TAXONOMY/${SAMPLE}_kraken_output.txt" "$CONTIGS_FA"
-  bracken -d "$KRAKEN_DB" -i "$OUTPUT_DIR/03_PROFILING/TAXONOMY/${SAMPLE}_kraken_report.txt" -o "$OUTPUT_DIR/03_PROFILING/TAXONOMY/${SAMPLE}_bracken_species.txt" -r 150 -l G -t 1
+  READ1="$OUTPUT_DIR/00_QC/FASTP/${SAMPLE}_R1_trimmed.fastq.gz"
+  READ2="$OUTPUT_DIR/00_QC/FASTP/${SAMPLE}_R2_trimmed.fastq.gz"
+  TAX_DIR="$OUTPUT_DIR/03_PROFILING/TAXONOMY"
+
+  kraken2 \
+    --db "$KRAKEN_DB" \
+    --threads "$THREADS" \
+    --paired "$READ1" "$READ2" \
+    --report "$TAX_DIR/${SAMPLE}_kraken_report.txt" \
+    --output "$TAX_DIR/${SAMPLE}_kraken_output.txt"
+
+  for level in D P C O F G S; do
+    echo "  → Rodando Bracken para nível $level ..."
+    bracken \
+      -d "$KRAKEN_DB" \
+      -i "$TAX_DIR/${SAMPLE}_kraken_report.txt" \
+      -o "$TAX_DIR/${SAMPLE}_bracken_${level}.txt" \
+      -r 150 \
+      -l "$level" \
+      -t 1
+  done
 
   PRODIGAL_CONTIGS_DIR="$OUTPUT_DIR/03_PROFILING/CONTIG_ANNOTATION/PRODIGAL"
   CONTIGS_PROTEINS="$PRODIGAL_CONTIGS_DIR/PROTEINS/${SAMPLE}_contigs.faa"
