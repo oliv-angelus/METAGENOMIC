@@ -21,12 +21,6 @@ dependencies:
 
   # Metagenomic Binning
   - metabat2
-  - maxbin2
-  - concoct
-  - semibin
-
-  # Bin Refinement & Selection
-  - das_tool
 
   # MAG Quality Assessment
   - checkm2
