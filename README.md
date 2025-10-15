@@ -40,12 +40,6 @@ This repository leverages a range of standard and state-of-the-art bioinformatic
 
 #### **Metagenomic Binning**
 * **MetaBAT2**: A tool for binning assembled contigs into MAGs based on sequence composition and coverage (i preffer this one).
-* **MaxBin2**: Another popular tool for binning contigs.
-* **CONCOCT**: Bins contigs using sequence composition and coverage across multiple samples.
-* **SemiBin**: A semi-supervised tool that leverages deep learning for binning.
-
-#### **Bin Refinement & Selection**
-* **DAS Tool**: An automated method for selecting and refining the best set of bins from multiple binning tools.
 
 #### **MAG Quality Assessment**
 * **CheckM2**: The current standard for assessing the completeness and contamination of MAGs using a machine learning model.
