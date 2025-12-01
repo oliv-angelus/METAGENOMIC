@@ -116,12 +116,12 @@ for SAMPLE_DIR in "$INPUT_DIR"/*; do
     --report "$TAX_DIR/${SAMPLE}_kraken_report.txt" \
     --output "$TAX_DIR/${SAMPLE}_kraken_output.txt"
 
-  for level in D P C O F G S; do
+  for level in D K P C O F G S; do
     echo "  → Rodando Bracken para nível $level ..."
     bracken \
       -d "$KRAKEN_DB" \
       -i "$TAX_DIR/${SAMPLE}_kraken_report.txt" \
-      -o "$TAX_DIR/${SAMPLE}_bracken_${level}.txt" \
+      -o "$TAX_DIR/BRACKEN/${SAMPLE}_bracken_${level}.txt" \
       -r 150 \
       -l "$level" \
       -t 1
@@ -158,9 +158,5 @@ for SAMPLE_DIR in "$INPUT_DIR"/*; do
      
   echo -e "\033[32m✅ Finished processing sample: $SAMPLE\033[0m"
 done
-
-# --- [07] RELATÓRIO FINAL ---
-echo -e "\033[35m[07] ETAPA: MULTIQC\033[0m"
-multiqc "$OUTPUT_DIR/00_QC" "$OUTPUT_DIR/01_ASSEMBLY" "$OUTPUT_DIR/05_MAG_QC/CHECKM2" -o "$OUTPUT_DIR/REPORTS"
 
 echo -e "\033[32m✅ Pipeline finished! Outputs in: $OUTPUT_DIR \033[0m"
