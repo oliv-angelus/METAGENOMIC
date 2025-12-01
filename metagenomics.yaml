@@ -9,10 +9,9 @@ channels:
 dependencies:
   # Quality Control
   - fastqc
-  - nanoplot
   - fastp
   - filtlong
-  - multiqc
+  - nanoplot
 
   # Assembly & Assessment
   - megahit
