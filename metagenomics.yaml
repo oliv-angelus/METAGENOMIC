@@ -10,12 +10,9 @@ dependencies:
   # Quality Control
   - fastqc
   - fastp
-  - filtlong
-  - nanoplot
 
   # Assembly & Assessment
   - megahit
-  - flye
   - quast
 
   # Metagenomic Binning
