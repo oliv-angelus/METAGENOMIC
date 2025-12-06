@@ -1,7 +1,7 @@
 # How to executate the creation of this environment using mamba:
-# mamba env create -f metagenomics.yml
+# mamba env create -f PEMS.yml
 
-name: metagenomics
+name: PEMS
 channels:
   - conda-forge
   - bioconda
