@@ -105,7 +105,7 @@ For downstream analysis, statistical testing, and generating plots from the data
 
 If you use **PEMS-Pipeline** in your research, please cite:
 
-> **de Oliveira, A. F. B.** (2025). *PEMS-Pipeline: A Paired-End Metagenomics Shotgun Pipeline*. Available at: https://github.com/YOUR_USERNAME/PEMS-Pipeline
+> **de Oliveira, A. F. B.** (2025). *PEMS-Pipeline: A Paired-End Metagenomics Shotgun Pipeline*. Available at: https://github.com/oliv-angelus/PEMS-pipeline
 
 Alternatively, you can cite this repository using the `CITATION.cff` file provided.
 
