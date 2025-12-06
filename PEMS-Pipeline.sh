@@ -2,10 +2,10 @@
 
 set -e
 
-echo -e "\033[34m SCRIPT FOR PAIRED-END METAGENOMICS \033[0m"
+echo -e "\033[34m Paired-End Metagenomics Shotgun Pipeline \033[0m"
 
 # ===================== #
-# PIPELINE FOR SHOTGUN  #
+# PEMS-Pipeline  #
 # ===================== #
 
 # == # INPUTS
