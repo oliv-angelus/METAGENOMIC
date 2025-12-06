@@ -1,5 +1,8 @@
 # PEMS-Pipeline 🧬
 
+[![DOI](https://zenodo.org/badge/1058699447.svg)](https://doi.org/10.5281/zenodo.17842160)
+[![Bash](https://img.shields.io/badge/Shell-Bash-black?style=flat&logo=gnu-bash&logoColor=white)](https://www.gnu.org/software/bash/)
+
 ### **P**aired-**E**nd **M**etagenomics **S**hotgun **Pipeline**
 
 **PEMS-Pipeline** is an automated Bash workflow designed for the comprehensive analysis of paired-end shotgun metagenomic data. It streamlines the process from raw read quality control to the recovery and quality assessment of Metagenome-Assembled Genomes (MAGs).
