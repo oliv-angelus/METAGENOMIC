@@ -47,7 +47,7 @@ The script uses the `checkm2` tool to download its own specific database. Theref
 *Option A: instaling at the default location (~/databases)*
 
 ```bash
-chmod =x databases.sh
+chmod +x databases.sh
 ```
 
 *Option B: instaling to a custom location provided as an argument*
