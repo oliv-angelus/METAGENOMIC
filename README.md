@@ -1,128 +1,114 @@
-# METAGENOMIC
+# PEMS-Pipeline 🧬
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-![Language](https://img.shields.io/github/languages/top/YOUR-USERNAME/METAGENOMIC)
-![Last Commit](https://img.shields.io/github/last-commit/YOUR-USERNAME/METAGENOMIC)
+### **P**aired-**E**nd **M**etagenomics **S**hotgun **Pipeline**
 
-A repository containing a collection of scripts to automate and streamline shotgun metagenomics analysis workflows.
+**PEMS-Pipeline** is an automated Bash workflow designed for the comprehensive analysis of paired-end shotgun metagenomic data. It streamlines the process from raw read quality control to the recovery and quality assessment of Metagenome-Assembled Genomes (MAGs).
 
-## 📖 About This Project
+## 📋 Workflow Overview
 
-This project provides a suite of scripts designed to handle various stages of a metagenomic analysis pipeline, with tailored workflows for both Illumina (short-read) and Oxford Nanopore (long-read)(soon) sequencing data. The tools are built to manage the unique characteristics of each data type and can be adapted for hybrid assembly approaches. The pipeline covers all critical steps, from the initial quality control of raw reads to the final annotation and classification of high-quality Metagenome-Assembled Genomes (MAGs). The goal is to create a modular, reproducible, and easy-to-use toolkit for researchers.
+The pipeline executes the following sequential steps:
 
-## 🛠️ Core Technologies
+1.  **Quality Control:** Raw read processing using **FastQC** and **Fastp**.
+2.  **Assembly:** De novo assembly using **MEGAHIT** and assessment with **QUAST**.
+3.  **Mapping & Coverage:** Read mapping with **Minimap2**, sorting with **Samtools**, and coverage calculation with **CoverM**.
+4.  **Profiling:** Taxonomic classification using **Kraken2/Bracken** and functional annotation with **Prodigal/EggNOG-mapper**.
+5.  **Binning:** Genome binning using **MetaBAT2**.
+6.  **MAG Quality:** Quality assessment of bins using **CheckM2**.
 
-The scripts and workflows in this repository are built using the following technologies:
+## 🛠️ Requirements & Installation
 
-* **Languages:**
-    * `Shell (Bash)`
-    * `R`
+The only requirement to run PEMS-Pipeline is **Mamba** (Recommended for faster dependency resolution). All necessary bioinformatics tools are automatically installed via the provided `PEMS.yaml` file.
 
-* **Environment Management:**
-    * `Conda` and `Mamba` are used for robust and reproducible dependency management, ensuring that all tools run in a consistent environment.
+### 1. Installation
 
-## 🔬 Key Bioinformatic Tools
-
-This repository leverages a range of standard and state-of-the-art bioinformatic tools, which are orchestrated by the scripts. The core tools utilized include:
-
-#### **Quality Control**
-* **FastQC**: Raw read quality assessment for illumina reads.
-* **NanoPlot**: Raw read quality assessment for nanopore reads.
-* **Fastp**: For trimming illumina reads.
-* **Filtlong**: For trimming nanopore reads.
-* **MultiQC**: Aggregates reports from multiple tools into a single HTML file.
-
-#### **Assembly & Assessment**
-* **MEGAHIT**: A fast and memory-efficient metagenome assembler for illumina reads.
-* **Flye**: An assembler for long and noisy reads (useful for hybrid assembly), here we use for nanopore reads using -meta parameter.
-* **Quast**: Evaluates the quality of genome assemblies.
-
-#### **Metagenomic Binning**
-* **MetaBAT2**: A tool for binning assembled contigs into MAGs based on sequence composition and coverage (i preffer this one).
-
-#### **MAG Quality Assessment**
-* **CheckM2**: The current standard for assessing the completeness and contamination of MAGs using a machine learning model.
-
-#### **Gene Prediction & Functional Annotation**
-* **Prodigal**: A fast and accurate gene prediction tool for microbial genomes.
-* **eggNOG-mapper**: A tool for fast functional annotation of proteins.
-
-#### **Taxonomic Classification**
-* **Kraken2**: A k-mer-based tool for assigning taxonomic labels to sequences.
-* **Bracken**: Estimates species/genus abundance from Kraken2 reports.
-
-#### **Read Mapping & Coverage**
-* **Minimap2**: A fast sequence mapper for DNA and mRNA sequences.
-* **SAMtools**: A suite of tools for interacting with high-throughput sequencing data.
-* **CoverM**: A tool for calculating coverage of contigs or genomes.
-
-#### **Phylogenetic Analysis**
-* **MAFFT**: A multiple sequence alignment program.
-* **FastTree**: Infers approximately-maximum-likelihood phylogenetic trees from alignments.
-
-## 🚀 Getting Started
-
-This guide will walk you through setting up the computational environment and downloading the necessary databases to run the analyses in this repository.
-
-1. Prerequisites
-Before you begin, you must have Mamba (or Conda) installed on your system.
-
-2. Clone the Repository
-First, clone this repository to your local machine and navigate into the created directory.
+Clone the repository and create the environment using **mamba** with the `PEMS.yaml` file:
 
 ```bash
-git clone https://github.com/oliv-angelus/metagenomic
-cd metagenomic
+# Clone the repository
+git clone [https://github.com/oliv-angelus/PEMS-Pipeline.git](https://github.com/oliv-angelus/PEMS-Pipeline.git)
+cd PEMS-Pipeline
+
+# Create the environment (using Mamba)
+mamba env create -f PEMS.yaml
+
+# Activate the environment
+mamba activate PEMS
 ```
-3. Create the Mamba Environment
-The metagenomics.yaml file contains a list of all the required tools. Use the command below to create an isolated environment with everything installed:
+
+### 2. Databases setup
+
+This project includes an automated script to download and configure the required databases (CheckM2 and EggNOG) and set up the directory structure. 
+
+### ⚠️ Prerequisites
+The script uses the `checkm2` tool to download its own specific database. Therefore, **you must activate the PEMS Mamba environment** where CheckM2 is installed before running the script.
+
+### 🚀 Usage
+
+*Option A: instaling at the default location (~/databases)*
 
 ```bash
-mamba env create -f metagenomics.yaml
+chmod =x databases.sh
 ```
-This may take a few minutes as Mamba will download and install dozens of bioinformatics packages. Once completed, activate the environment to start using it:
+
+*Option B: instaling to a custom location provided as an argument*
 
 ```bash
-mamba activate metagenomics
-```
-4. Prepare the Databases
-The databases.sh script automates the download and preparation of the CheckM2 and EggNOG databases.
-
-Attention! Before running the script, make sure the metagenomics environment (created in the previous step) is active. The script requires the checkm2 command to function correctly.
-
-a. Make the script executable (only needs to be done once):
-
-```bash
-chmod +x databases.sh
+./databases.sh /path/to/custom/database_dir
 ```
 
-b. Run the script:
+### 📝 Important Notes
 
-You can run the script in one of two ways:
+*Disk Space:* The EggNOG database download is large. Ensure you have sufficient disk space before proceeding.
 
-* Option 1 (Default): Download the databases to the default directory (~/databases):
+*Kraken2:* The script creates the directory structure for Kraken2 but DOES NOT download the database automatically (due to the large file size and variety of index options). Please follow the instructions printed at the end of the script execution to download the official index manually.
 
-```bash
-./databases.sh
+
+## 📂 Output Structure
+
+After execution, **PEMS-Pipeline** organizes results into the following directory tree:
+
+```text
+results/
+├── 00_QC/
+│   ├── FASTQC/              # Quality reports before/after trimming
+│   └── FASTP/               # Trimmed reads (*.fastq.gz) and HTML/JSON reports
+├── 01_ASSEMBLY/
+│   ├── MEGAHIT/             # Final contigs (final.contigs.fa)
+│   └── QUAST/               # Assembly quality metrics
+├── 02_MAPPING_AND_COVERAGE/
+│   ├── BAM/                 # Sorted BAM files and depth calculations
+│   └── COVERM/              # Coverage tables per sample
+├── 03_PROFILING/
+│   ├── TAXONOMY/            # Kraken2 reports and Bracken abundance estimations
+│   └── CONTIG_ANNOTATION/   # Prodigal gene predictions (GFF/FAA/FNA) and EggNOG annotations
+├── 04_BINNING/
+│   └── METABAT2/            # Recovered bins (MAGs)
+└── 05_MAG_QC/
+    └── CHECKM2/             # Completeness and contamination reports for MAGs
 ```
 
-* Option 2 (Custom): Specify a different directory (e.g., an external HDD):
+### 📊 Analysis & Visualization
 
-```Bash
-./databases.sh /path/to/your/directory
-```
+For downstream analysis, statistical testing, and generating plots from the data processed by this pipeline, please use the official companion application:
 
-This process can be very time-consuming and may use tens of gigabytes of disk space and bandwidth, depending on your connection.
+**OmniMeta**
+🔗 https://github.com/oliv-angelus/OmniMeta.git
 
-5. Download the Kraken2 Database (Manual Step)
-As noted by the script, the Kraken2 database must be downloaded manually. This allows you to choose the version that is most appropriate for your analysis (e.g., Standard, PlusPF, etc.).
+## 👤 Author
 
-      1. Access the official Kraken2 database index: https://benlangmead.github.io/aws-indexes/k2.
+**Angelo Felipe Barbosa de Oliveira**
 
-      2. Choose and download the database of your preference.
+[![ORCID](https://img.shields.io/badge/ORCID-0000--0003--0831--447X-green.svg)](https://orcid.org/0000-0003-0831-447X)
+[![Lattes](https://img.shields.io/badge/Lattes-Curriculum-blue.svg)](http://lattes.cnpq.br/5450775990055106)
 
-      3. Unpack it and place the contents inside the kraken2_database directory that was created by the databases.sh script (${DB_PATH}/kraken2_database).
+## 📄 Citation
 
-## 📄 License
+If you use **PEMS-Pipeline** in your research, please cite:
 
-This project is distributed under the MIT License. See the `LICENSE` file for more information.
+> **de Oliveira, A. F. B.** (2025). *PEMS-Pipeline: A Paired-End Metagenomics Shotgun Pipeline*. Available at: https://github.com/YOUR_USERNAME/PEMS-Pipeline
+
+Alternatively, you can cite this repository using the `CITATION.cff` file provided.
+
+## ⚖️ License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
